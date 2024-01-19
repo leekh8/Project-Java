@@ -13,17 +13,17 @@ This is a collection of projects that use Java.
 
 ## 📂 Sub-Projects
 
-### 1. something
+### 1. SwiftType :keyboard::dash:
 
-- **Description**: (Add a brief description of the Code Mentor project here)
+- **Description**: SwiftType is a Java-based desktop application that measures and analyzes a user's typing speed in real-time. The program allows users to type a given text and calculates the typing speed while typing, displaying the results live. It serves as a tool for typing practice and speed improvement.
 - **Goals**:
-  - Goal 1
-  - Goal 2
+  - Provide a feature that enables users to practice typing by entering given texts.
+  - Implement a feature that calculates the user's typing speed in real-time and effectively visualizes the results.
 - **Tech Stack**:
-  - FrontEnd: (Technologies)
-  - BackEnd: (Technologies)
-  - Database: (Database)
-  - Testing: (Testing frameworks)
+  - FrontEnd: JavaFX (for user interface creation), CSS (for styling)
+  - BackEnd: Java (for application logic)
+  - Database: None (not required for this project)
+  - Testing: JUnit (for unit testing)
 
 ---
 
