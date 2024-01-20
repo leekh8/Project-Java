@@ -1,0 +1,73 @@
+.root {
+    font-family: 'Arial', sans-serif;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+
+/* 샘플 텍스트 영역 스타일 */
+.sample-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+
+/* 타이핑 필드 스타일 */
+.typing-field {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #4CAF50;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+/* 버튼 공통 스타일 */
+.button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.button:last-child {
+    margin-right: 0;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+/* 재시작 버튼 스타일 */
+.restart-button {
+    background-color: #008CBA;
+}
+
+.restart-button:hover {
+    background-color: #007bb8;
+}
+
+/* 종료 버튼 스타일 */
+.close-button {
+    background-color: #f44336;
+}
+
+.close-button:hover {
+    background-color: #d32f2f;
+}
+
+/* 텍스트 레이블 스타일 */
+.label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
