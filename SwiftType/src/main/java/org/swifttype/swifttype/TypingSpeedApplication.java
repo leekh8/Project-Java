@@ -5,8 +5,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -45,86 +47,100 @@ public class TypingSpeedApplication extends Application {
     private TextField typingField;
     private Label speedLabel;
     private Label accuracyLabel;
+    private boolean isWpm = false;
+    private TextArea sampleTextArea;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
     @Override
     public void start(Stage stage) {
         // 폰트 로드
-        Font pretendard =Font.loadFont(getClass().getResourceAsStream("/fonts/PretendardVariable.ttf"), 14);
+        Font pretendard = Font.loadFont(getClass().getResourceAsStream("/fonts/PretendardVariable.ttf"), 14);
 
-        // UI 컴포넌트
         Label promptLabel = new Label("아래 텍스트를 입력하세요:");
-        TextArea sampleTextArea = new TextArea(getRandomText(sampleTexts));
-        sampleTextArea.setEditable(false);
-        typingField = new TextField();
-        speedLabel = new Label("타자 속도: 0 WPM");
-        accuracyLabel = new Label("정확도: 100%");
-        Button restartButton = new Button("재시작");
-        Button closeButton = new Button("종료");
-
-        // 폰트 적용
         promptLabel.setFont(pretendard);
-        sampleTextArea.setFont(pretendard);
-        typingField.setFont(pretendard);
-        speedLabel.setFont(pretendard);
-        accuracyLabel.setFont(pretendard);
-        restartButton.setFont(pretendard);
-        closeButton.setFont(pretendard);
 
-        closeButton.setOnAction(event -> stage.close());
+        sampleTextArea = new TextArea(getRandomText(sampleTexts));
+        sampleTextArea.setEditable(false);
+        sampleTextArea.setFont(pretendard);
+
+        typingField = new TextField();
+        typingField.setFont(pretendard);
+
+        speedLabel = new Label("타자 속도: 0 타");
+        speedLabel.setFont(pretendard);
+
+        accuracyLabel = new Label("정확도: 100%");
+        accuracyLabel.setFont(pretendard);
+
+        Button restartButton = new Button("재시작");
+        restartButton.setFont(pretendard);
+        restartButton.setOnAction(e -> restartTyping());
+
+        Button closeButton = new Button("종료");
+        closeButton.setFont(pretendard);
+        closeButton.setOnAction(e -> stage.close());
 
         Button toggleButton = new Button("한글/영어 전환");
-        toggleButton.setOnAction(event -> {
-            if (Arrays.asList(sampleTexts).contains(sampleTextArea.getText())) {
-                sampleTextArea.setText(getRandomText(englishSampleTexts));
-            } else {
-                sampleTextArea.setText(getRandomText(sampleTexts));
-            }
-            restartTyping();
-        });
+        toggleButton.setFont(pretendard);
+        toggleButton.setOnAction(e -> toggleLanguage(sampleTextArea));
 
-        typingField.setOnKeyPressed(event -> {
+        RadioButton cpmButton = new RadioButton("타");
+        cpmButton.setFont(pretendard);
+        cpmButton.setSelected(true);
+
+        RadioButton wpmButton = new RadioButton("WPM");
+        wpmButton.setFont(pretendard);
+
+        ToggleGroup speedTypeGroup = new ToggleGroup();
+        cpmButton.setToggleGroup(speedTypeGroup);
+        wpmButton.setToggleGroup(speedTypeGroup);
+
+        cpmButton.setOnAction(e -> isWpm = false);
+        wpmButton.setOnAction(e -> isWpm = true);
+
+        HBox speedTypeSelection = new HBox(10, cpmButton, wpmButton);
+        speedTypeSelection.setAlignment(Pos.CENTER);
+
+        typingField.setOnKeyPressed(e -> {
             if (startTime == 0) {
                 startTime = System.currentTimeMillis();
             }
         });
 
-        typingField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isEmpty()) {
-                long elapsedTime = System.currentTimeMillis() - startTime;
-                double minutes = elapsedTime / 60000.0;
-                int words = newValue.split("\\s+").length;
-                double speed = minutes > 0 ? words / minutes : 0;
-                speedLabel.setText(String.format("타자 속도: %.2f WPM", speed));
-
-                double accuracy = calculateAccuracy(sampleTextArea.getText(), newValue);
-                accuracyLabel.setText(String.format("정확도: %.2f%%", accuracy));
-            }
-        });
-
-        restartButton.setOnAction(event -> {
-            sampleTextArea.setText(getRandomText(sampleTexts));
-            restartTyping();
-        });
+        typingField.textProperty().addListener((observable, oldValue, newValue) -> calculateSpeedAndAccuracy(newValue));
 
         HBox buttonBox = new HBox(10, restartButton, toggleButton, closeButton);
         buttonBox.setAlignment(Pos.CENTER);
 
-        VBox layout = new VBox(10, promptLabel, sampleTextArea, typingField, speedLabel, accuracyLabel, buttonBox);
+        VBox layout = new VBox(10, promptLabel, sampleTextArea, typingField, speedLabel, accuracyLabel, speedTypeSelection, buttonBox);
         layout.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(layout, 600, 400);
 
-        stage.setTitle("타자 속도 테스트");
+        Scene scene = new Scene(layout, 600, 400);
+        stage.setTitle("Swift Type");
         stage.setScene(scene);
         stage.show();
     }
 
+    private void calculateSpeedAndAccuracy(String newValue) {
+        if (!newValue.isEmpty() && startTime > 0) {
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            double minutes = elapsedTime / 60000.0;
+            if (isWpm) {
+                int words = newValue.trim().split("\\s+").length;
+                double wpm = minutes > 0 ? words / minutes : 0;
+                speedLabel.setText(String.format("타자 속도: %.2f WPM", wpm));
+            } else {
+                int characters = newValue.length();
+                double cpm = minutes > 0 ? characters / minutes : 0;
+                speedLabel.setText(String.format("타자 속도: %.0f 타", cpm));
+            }
+        }
+    }
+
     private void restartTyping() {
+        sampleTextArea.setText(getRandomText(isWpm ? englishSampleTexts : sampleTexts));
         typingField.clear();
-        speedLabel.setText("타자 속도: 0 WPM");
+        speedLabel.setText(isWpm ? "타자 속도: 0 타" : "타자 속도: 0 WPM");
         accuracyLabel.setText("정확도: 100%");
         startTime = 0;
     }
@@ -134,14 +150,16 @@ public class TypingSpeedApplication extends Application {
         return texts[random.nextInt(texts.length)];
     }
 
-    private double calculateAccuracy(String original, String typed) {
-        int errors = 0;
-        for (int i = 0; i < Math.min(original.length(), typed.length()); i++) {
-            if (original.charAt(i) != typed.charAt(i)) {
-                errors++;
-            }
+    private void toggleLanguage(TextArea sampleTextArea) {
+        if (Arrays.asList(sampleTexts).contains(sampleTextArea.getText())) {
+            sampleTextArea.setText(getRandomText(englishSampleTexts));
+        } else {
+            sampleTextArea.setText(getRandomText(sampleTexts));
         }
-        errors += Math.abs(original.length() - typed.length());
-        return original.length() > 0 ? 100.0 * (original.length() - errors) / original.length() : 100.0;
+        restartTyping();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
