@@ -19,13 +19,27 @@ public class TypingSpeedApplication extends Application {
     private final String[] sampleTexts = {
             "파란 하늘을 나는 새가 보고 싶다",
             "빠르게 달리는 강물처럼 시간은 흐른다",
-            "행복은 가까이에 있을지도 모른다"
+            "행복은 가까이에 있을지도 모른다",
+            "조용한 아침의 첫 번째 커피처럼",
+            "바쁜 일상 속에서도 미소를 잃지 않기",
+            "작은 것에서 행복을 찾는 것이 중요하다",
+            "매일 매일이 새로운 시작이 될 수 있다",
+            "꿈을 향해 한 걸음씩 나아가기",
+            "좋은 생각은 좋은 결과를 가져온다",
+            "힘든 시간도 결국 지나가기 마련이다"
     };
 
     private final String[] englishSampleTexts = {
             "The quick brown fox jumps over the lazy dog",
             "A journey of a thousand miles begins with a single step",
-            "To be or not to be, that is the question"
+            "To be or not to be, that is the question",
+            "Every moment is a fresh beginning",
+            "Believe you can and you're halfway there",
+            "Dream big and dare to fail",
+            "Keep your face always toward the sunshine and shadows will fall behind you",
+            "The only way to do great work is to love what you do",
+            "Success is not the key to happiness. Happiness is the key to success",
+            "Life is 10% what happens to us and 90% how we react to it"
     };
     private long startTime;
     private TextField typingField;
