@@ -9,6 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.util.Arrays;
@@ -37,6 +38,10 @@ public class TypingSpeedApplication extends Application {
 
     @Override
     public void start(Stage stage) {
+        // 폰트 로드
+        Font pretendard =Font.loadFont(getClass().getResourceAsStream("/fonts/PretendardVariable.ttf"), 14);
+
+        // UI 컴포넌트
         Label promptLabel = new Label("아래 텍스트를 입력하세요:");
         TextArea sampleTextArea = new TextArea(getRandomText(sampleTexts));
         sampleTextArea.setEditable(false);
@@ -45,6 +50,15 @@ public class TypingSpeedApplication extends Application {
         accuracyLabel = new Label("정확도: 100%");
         Button restartButton = new Button("재시작");
         Button closeButton = new Button("종료");
+
+        // 폰트 적용
+        promptLabel.setFont(pretendard);
+        sampleTextArea.setFont(pretendard);
+        typingField.setFont(pretendard);
+        speedLabel.setFont(pretendard);
+        accuracyLabel.setFont(pretendard);
+        restartButton.setFont(pretendard);
+        closeButton.setFont(pretendard);
 
         closeButton.setOnAction(event -> stage.close());
 
